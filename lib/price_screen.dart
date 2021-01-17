@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'coin_data.dart' as coin_data;
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -6,6 +7,40 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+  String dropdownValue = 'AUD';
+  // var mItems = <DropdownMenuItem<String>>[]; // equal to below statement
+  List<DropdownMenuItem<String>> mItems = []; //from udemy
+  @override
+  void initState() {
+    super.initState();
+    addItems();
+  }
+
+  // from udemy
+  List<DropdownMenuItem<String>> dropdownMenuItems() {
+    for (int i = 0; i < coin_data.currenciesList.length; i++) {
+      String currency = coin_data.currenciesList[i];
+      var mItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      mItems.add(mItem);
+    }
+    return mItems;
+  }
+
+  // this is my solving
+  void addItems() {
+    for (var currency in coin_data.currenciesList) {
+      mItems.add(
+        DropdownMenuItem(
+          child: Text(currency),
+          value: currency,
+        ),
+      ); //for loop
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,11 +73,21 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ),
           Container(
-            height: 150.0,
+            height: 100.0,
             alignment: Alignment.center,
-            padding: EdgeInsets.only(bottom: 30.0),
+            padding: EdgeInsets.only(bottom: 8.0),
             color: Colors.lightBlue,
-            child: null,
+            child: DropdownButton<String>(
+              value: dropdownValue,
+              items: mItems,
+              // items: dropdownMenuItems(),
+              onChanged: (val) {
+                setState(() {
+                  dropdownValue = val;
+                  print(val);
+                });
+              },
+            ),
           ),
         ],
       ),
